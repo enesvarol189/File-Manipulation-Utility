@@ -1,8 +1,10 @@
 #include "file_operations.h"
 #include <fstream>
 #include <iostream>
+#include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
 
 void copyFile(const string& source, const string& destination) {
     ifstream src(source, ios::binary);
@@ -31,4 +33,17 @@ void copyFile(const string& source, const string& destination) {
     }
 
     cout << "File copied successfully from '" << source << "' to '" << destination << "'." << endl;
+}
+
+void searchFiles(const string& directory, const string& pattern) {
+    try {
+        for (const auto& entry : fs::recursive_directory_iterator(directory)) {
+            if (fs::is_regular_file(entry) && entry.path().filename().string().find(pattern) != string::npos) {
+                // Perform actions on matching files
+                cout << "Found matching file: " << entry.path() << endl;
+            }
+        }
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << endl;
+    }
 }
