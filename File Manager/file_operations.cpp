@@ -39,7 +39,6 @@ void searchFiles(const string& directory, const string& pattern) {
     try {
         for (const auto& entry : fs::recursive_directory_iterator(directory)) {
             if (fs::is_regular_file(entry) && entry.path().filename().string().find(pattern) != string::npos) {
-                // Perform actions on matching files
                 cout << "Found matching file: " << entry.path() << endl;
             }
         }
