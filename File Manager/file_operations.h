@@ -8,4 +8,6 @@ void copyFile(const string& source, const string& destination);
 
 void searchFiles(const string& directory, const string& pattern);
 
+double compareFiles(const string& file1, const string& file2);
+
 #endif
