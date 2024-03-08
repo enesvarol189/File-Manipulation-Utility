@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include <vector>
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -45,4 +46,29 @@ void searchFiles(const string& directory, const string& pattern) {
     } catch (const exception& e) {
         cerr << "Error: " << e.what() << endl;
     }
+}
+
+double compareFiles(const string& file1, const string& file2) {
+    ifstream fileStream1(file1, ios::binary);
+    ifstream fileStream2(file2, ios::binary);
+
+    if (!fileStream1.is_open() || !fileStream2.is_open()) {
+        cerr << "Error: Unable to open files for comparison." << endl;
+        return -1;
+    }
+
+    vector<unsigned char> content1(istreambuf_iterator<char>(fileStream1), {});
+    vector<unsigned char> content2(istreambuf_iterator<char>(fileStream2), {});
+
+    size_t matchingBytes = 0;
+    size_t totalBytes = min(content1.size(), content2.size());
+    for (size_t i = 0; i < totalBytes; ++i) {
+        if (content1[i] == content2[i]) {
+            ++matchingBytes;
+        }
+    }
+
+    double similarityPercentage = (static_cast<double>(matchingBytes) / totalBytes) * 100;
+
+    return similarityPercentage;
 }
